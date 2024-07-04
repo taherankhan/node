@@ -1,0 +1,226 @@
+<%- include('header') %>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Orders</title>
+    <!-- Add any necessary CSS styles here -->
+    <link rel="stylesheet" href="/css/orders.css" />
+    <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
+    <style>
+        /* Add custom CSS for the status line */
+        .status-line {
+            height: 4px;
+            margin-top: 8px;
+        }
+
+        /* Add custom CSS for canceled status */
+        .status-line.canceled {
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <% if (noOrders) { %>
+        <h1>No orders found!</h1>
+        <% } else { %>
+        <h2 class="text-center">All Orders</h2>
+        <ul class="orders">
+            <% orders.forEach(order => { %>
+            <li class="orders__item">
+                <h1>Order - # <%= order._id %></h1>
+                <div class="status-container">
+                    <span class="status-label">Status:</span>
+                    <div class="status-line <%= order.status === 3 ? 'canceled' : '' %>" style="width: <%= getStatusWidth(order.status) %>;"></div>
+                    <span class="status-name"><%= getStatusName(order.status) %></span>
+                </div>
+                <% if (isadmin) { %>
+                <div>
+                    <select id="statusSelect<%= order._id %>">
+                        <option value="0" <%= order.status === 0 ? 'selected' : '' %>>Pending</option>
+                        <option value="1" <%= order.status === 1 ? 'selected' : '' %>>Shipped</option>
+                        <option value="2" <%= order.status === 2 ? 'selected' : '' %>>Delivered</option>
+                        <option value="3" <%= order.status === 3 ? 'selected' : '' %>>Canceled</option>
+                    </select>
+                    <button onclick="changeOrderStatus('<%= order._id %>')">Change Status</button>
+                </div>
+                <% } %>
+                <ul class="orders__products">
+                    <% order.products.forEach(p => { %>
+                    <li class="orders__products-item"><%= p.product.name %> (<%= p.quantity %>)</li>
+                    <% }); %>
+                </ul>
+                <a href="/cart/orders/<%= order._id %>">Invoice</a>
+            </li>
+            <% }); %>
+        </ul>
+        <% } %>
+    </main>
+    <!-- Add any necessary scripts here -->
+    <script>
+        function changeOrderStatus(orderId) {
+            const newStatus = document.getElementById('statusSelect' + orderId).value;
+            fetch('/cart/orders/' + orderId + '/status', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ status: newStatus }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to update order status');
+                }
+                location.reload(); // Refresh the page after updating the status
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle error
+            });
+        }
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+.orders {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .orders__item h1 {
+      margin: 0;
+      font-size: 1rem;
+  }
+  
+  .orders__item {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .orders__products {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+  }
+  
+  .order-details {
+    display: flex;
+    justify-content: space-between;
+}
+  .orders__products-item {
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      border: 1px solid #00695c;
+      color: #00695c;
+  }
+  h2.text-center {
+    margin-top: 20px; /* Adjust as needed */
+}
+
+.status-line {
+  height: 4px; /* Height of the status line */
+  background-color: #007bff; /* Default color of the status line */
+  transition: width 0.3s ease; /* Smooth transition for width change */
+}
+
+/* Custom styles for different status */
+.status-line.pending { background-color: #ffc107; }
+.status-line.shipped { background-color: #28a745; }
+.status-line.delivered { background-color: #007bff; }
+.status-line.canceled { background-color: #dc3545; }
+
+
+.orders {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.orders__item h1 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.orders__item {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.orders__products {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.orders__products-item {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    border: 1px solid #00695c;
+    color: #00695c;
+}
+
+
+
+
+
+
+
+
+exports.getOrders = async (req, res, next) => {
+  try {
+      // Check if user is logged in
+      if (!req.session.isLoggedIn) {
+          req.flash("error", "Please log in to view your orders");
+          return res.redirect("/users/login");
+      }
+
+      let orders;
+
+      // Check if the user is an admin
+      if (req.session.user.role === 0) {
+          // If admin, fetch all orders
+          orders = await Order.find().populate("user.userId products.product");
+      } else {
+          // If not admin, fetch orders belonging to the current user
+          orders = await Order.find({
+              "user.userId": req.session.user._id,
+          }).populate("products.product");
+      }
+
+      // Render the orders page with fetched orders data
+      res.render("orders", {
+          pageTitle: "Your Orders",
+          orders: orders,
+          isauthenticated: req.session.isLoggedIn,
+          isadmin: req.session.user.role === 0,
+          noOrders: orders.length === 0, // Pass a flag indicating if no orders are available
+          getStatusWidth: getStatusWidth, // Pass getStatusWidth function to the template
+          getStatusName: getStatusName // Pass getStatusName function to the template
+      });
+  } catch (error) {
+      console.error("Error fetching orders:", error);
+      req.flash("error", "Failed to fetch orders");
+      res.redirect("/cart");
+  }
+};

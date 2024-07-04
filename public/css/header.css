@@ -1,0 +1,46 @@
+
+/* Style for the header */
+header {
+    background-color: #ffffff; /* Background color */
+    padding: 15px 0; /* Top and bottom padding */
+  }
+  
+  /* Style for the navbar */
+  .navbar {
+    border-bottom: 1px solid #dee2e6; /* Bottom border */
+  }
+  
+  /* Style for the navbar-brand */
+  .navbar-brand {
+    font-size: 1.5rem; /* Font size */
+  }
+  
+  /* Style for the navbar-toggler  */
+  .navbar-toggler {
+    border: none; /* Remove border */
+  }
+  
+  /* Style for the navbar-nav (navigation links) */
+  .navbar-nav .nav-link {
+    font-size: 1.1rem; 
+    color: #333333; 
+  }
+  
+  /* Style for the active navigation link */
+  .navbar-nav .nav-item.active .nav-link {
+    color: #007bff; 
+  }
+  
+  /* Style for the dropdown menu */
+  .dropdown-menu {
+    background-color: #ffffff; /* Background color */
+    border: 1px solid rgba(0, 0, 0, 0.15); /* Border */
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); /* Box shadow */
+  }
+  
+  /* Style for dropdown items */
+  .dropdown-item {
+    color: #333333; /* Text color */
+  }
+  
+  

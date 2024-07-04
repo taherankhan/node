@@ -1,0 +1,39 @@
+/* category-products.css */
+
+/* Center the container */
+.category-container {
+    max-width: 600px;
+    border: 1px solid black;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Style the list group */
+.list-group {
+    margin-top: 20px;
+}
+.main container{
+    border: 1px solid black;
+}
+/* Style the list items */
+.list-group-item {
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for list items */
+.list-group-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* Style the link within list items */
+.list-group-item a {
+    color: #333;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* Center the text when no products are available */

@@ -1,0 +1,120 @@
+.orders-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.order {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 20px;
+  width: 300px;
+}
+
+.order-details {
+  margin-bottom: 10px;
+}
+
+.status-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.status-line {
+  height: 4px;
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+/* Style for Invoice link */
+.card-body a {
+  color: #007bff;
+  text-decoration: none;
+  margin-top: 8px;
+  display: inline-block;
+}
+
+.card-body a:hover {
+  text-decoration: underline;
+}
+
+.status-name {
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.order-products {
+  list-style: none;
+  padding: 0;
+}
+
+.order-products li {
+  margin-bottom: 5px;
+}
+
+.admin-options {
+  display: flex;
+  align-items: center;
+}
+
+.admin-options select {
+  margin-right: 10px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.admin-options button {
+  padding: 8px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.admin-options button:hover {
+  background-color: #0056b3;
+}
+
+.product-images {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.product-image {
+  margin: 5px;
+}
+
+/* Style for additional images */
+.additional-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Display images in a grid with minimum width of 100px */
+  gap: 10px; /* Add some gap between images */
+}
+
+
+.additional-images .product-image {
+  margin: 5px;
+}
+
+.see-more-container {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.see-more-text {
+  color: #007bff;
+  cursor: pointer;
+}
+
+.see-more-text:hover {
+  text-decoration: underline;
+}
+
+.card{
+  height: 100%; 
+}

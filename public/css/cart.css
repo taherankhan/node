@@ -1,0 +1,122 @@
+/* Unique styling for cart page */
+.cart-container {
+  max-width: 1140px;
+}
+
+.cart-container .product-card {
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: box-shadow 0.3s; /* Add transition for smooth hover effect */
+}
+
+.cart-container .product-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Apply box shadow on hover */
+}
+
+.cart-container .product-name {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.toast {
+  color: #fff; /* Set text color */
+  background-color: #1b9a3f; /* Set background color */
+}
+
+.update-btn {
+  background-color: #007bff; /* Set button background color */
+  color: #fff; /* Set button text color */
+  border: none; /* Remove button border */
+  padding: 5px 10px; /* Add padding to the button */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  margin-right: 10px; /* Add margin between buttons */
+  margin-left: 10px;
+  border-radius: 5px
+}
+
+.update-btn:hover {
+  background-color: #0056b3; /* Change background color on hover */
+
+}
+
+.delete-btn {
+  background-color: #dc3545; /* Set delete button background color */
+  color: #fff; /* Set delete button text color */
+  border: none; /* Remove button border */
+  padding: 5px 10px; /* Add padding to the button */
+  cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+.delete-btn:hover {
+  background-color: #c82333; /* Change background color on hover */
+}
+
+.cart__item-list {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  width: 100%;
+}
+
+.cart__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  margin-bottom: 1rem;
+}
+
+.cart__item h1,
+.cart__item h2 {
+  margin-right: 1rem;
+  font-size: 1.2rem;
+  /* margin: 0; */
+}
+
+.product-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.product-details {
+  padding: 5px;
+  flex: 1;
+  margin-right: 20px; /* Add margin to separate from quantity controls */
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+}
+
+.quantity-control {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.quantity-control:hover {
+  background-color: #0056b3;
+}
+
+.quantity-input {
+  width: 50px;
+  text-align: center;
+  margin: 0 10px;
+}
+
+.total-price {
+  text-align: end;
+}
+
+a {
+  text-decoration: none;
+}
+

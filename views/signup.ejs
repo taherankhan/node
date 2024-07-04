@@ -1,0 +1,207 @@
+<%- include('header') %>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="/css/user/signup.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="
+https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"
+    />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+  </head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+  </head>
+  <body>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <div class="signup-form">
+      <h2 class="text-center">Signup</h2>
+      <form
+        action="/users/signup"
+        method="POST"
+        onsubmit="return checkforblank()"
+      >
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            maxlength="15"
+            placeholder="Enter your name"
+            autocomplete="off"
+          />
+          <div id="nameError" class="error-message"></div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your email"
+            autocomplete="off"
+            maxlength="254"
+            oninput="clearError('emailError')"
+          />
+          <div id="emailError" class="error-message"></div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+          />
+          <div id="PasswordError" class="error-message"></div>
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input
+            type="text"
+            id="phone"
+            name="phone"
+            placeholder="Enter your phone number"
+            min="10"
+            maxlength="15"
+          />
+          <div id="phoneError" class="error-message"></div>
+        </div>
+        <div class="form-group">
+          <div id="phoneHelp" class="form-text text-danger"></div>
+          <input type="text" name="countrycode" id="countrycode" hidden />
+        </div>
+        <button type="submit">Sign Up</button>
+      </form>
+    </div>
+  </body>
+  <script>
+    function checkforblank() {
+      var name =document.getElementById("name").value.trim();
+      var Email = document.getElementById("email").value.trim();
+        var  Password = document.getElementById("password").value;
+        var   Phone=document.getElementById("phone").value;
+    
+        var nameError= document.getElementById("nameError")
+        var EmailError = document.getElementById("emailError");
+        var PasswordError = document.getElementById("PasswordError");
+        var phoneError=document.getElementById("phoneError");
+
+        var hasError=false;
+        
+        if(name === ""){
+          nameError.innerHTML="please enter a name ";
+          hasError=true;
+        }
+        else{
+          nameError.innerHTML="";
+        }
+        if (Email === "") {
+          EmailError.innerHTML = "Please enter a email ";
+          hasError = true;
+        } else {
+          EmailError.innerHTML = "";
+        }
+        if (Password === "" || Password.length < 8) {
+          PasswordError.innerHTML = "Password must be at least 8 characters";
+          hasError = true;
+        } else {
+          PasswordError.innerHTML = "";
+        } 
+
+        if(Phone===""){
+          phoneError.innerHTML="please provide a phone number"
+          haserror=true;
+        }
+        else{
+          phoneError.innerHTML="";
+        }
+        return !hasError;
+        
+    }
+    const input = document.querySelector("#phone");
+    const iti = window.intlTelInput(input, {
+      initialCountry: "in",
+      separateDialCode: true,
+      utilsScript:
+        "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+    });
+
+    input.addEventListener("blur", function () {
+      if (input.value.trim()) {
+        if (iti.isValidNumber()) {
+          document.getElementById("phoneHelp").textContent = "";
+
+          const selectedCountryData = iti.getSelectedCountryData();
+          const countryCode = "+" + selectedCountryData.dialCode;
+          const phoneNumber = input.value
+            .trim()
+            .replace(countryCode, "")
+            .trim();
+          document.getElementById("countrycode").value = countryCode;
+          console.log(countryCode);
+          input.value = phoneNumber;
+        } else {
+          document.getElementById("phoneHelp").textContent =
+            "Please enter a valid phone number.";
+        }
+      } else {
+        document.getElementById("phoneHelp").textContent =
+         "";
+      }
+    });
+
+    document
+      .getElementById("name")
+      .addEventListener("keypress", function (event) {
+        var charCode = event.keyCode || event.which;
+        var charStr = String.fromCharCode(charCode);
+        if (!/[_a-zA-Z\s]/.test(charStr)) {
+          event.preventDefault();
+        }
+      });
+
+    // Add an event listener to the phone input field
+    document
+      .getElementById("phone")
+      .addEventListener("keypress", function (event) {
+        var charCode = event.keyCode || event.which;
+        var charStr = String.fromCharCode(charCode);
+        if (!/^\d$/.test(charStr)) {
+          event.preventDefault();
+        }
+      });
+
+      document.getElementById("name").addEventListener("input", function () {
+        document.getElementById("nameError").innerHTML = "";
+      });
+      document.getElementById("password").addEventListener("input", function () {
+        document.getElementById("PasswordError").innerHTML = "";
+      });
+
+      document.getElementById("phone").addEventListener("input", function () {
+        document.getElementById("phoneError").innerHTML = "";
+      });
+      function clearError(errorId) {
+      document.getElementById(errorId).innerHTML = "";
+    }
+
+
+  </script>
+  
+</html>

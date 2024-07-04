@@ -1,0 +1,78 @@
+/* productDetail.css */
+
+/* Center the product details container */
+.p-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+ 
+}
+
+/* Style the product card */
+.card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Style the product image */
+.card-img-top {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+/* Style the product name */
+.card-title {
+  font-size: 1.2rem;
+  margin-top: 10px;
+}
+
+/* Style the product description */
+.card-text {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Style the Read More button */
+.read-more {
+  color: #007bff;
+  cursor: pointer;
+}
+
+/* Style the quantity controls */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+}
+
+/* Style the quantity control buttons */
+.quantity-control {
+  cursor: pointer;
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 3px;
+  padding: 5px 10px;
+  font-size: 1rem;
+  margin-right: 5px;
+}
+
+/* Style the quantity input */
+.quantity-input {
+  border: 1px solid #ced4da;
+  border-radius: 3px;
+  padding: 5px;
+  font-size: 1rem;
+  width: 50px;
+  text-align: center;
+}
+
+/* Style the Add to Cart button */
+.add-to-cart {
+  font-size: 1rem;
+  padding: 5px 10px;
+}
+
+/* Style the toast messages */
+.toast {
+  font-size: 1rem;
+}

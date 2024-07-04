@@ -1,0 +1,72 @@
+
+.edit-product-container {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  margin-top: -10px;
+  border-radius: 11px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.user-message--error {
+  text-align: center;
+  color: red;
+}
+ 
+.error-message {
+  color: red;
+}
+.edit-product-container h2 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+.card-img-top {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  max-height: 300px; /* Set a max-height for the image */
+  object-fit: contain; /* Maintain aspect ratio and fill the space */
+}
+
+.edit-product-container .form-group {
+  margin-bottom: 10px;
+}
+
+.edit-product-container label {
+  font-weight: bold;
+}
+
+.edit-product-container input[type="text"],
+.edit-product-container input[type="number"],
+.edit-product-container textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.edit-product-container select {
+  width: 100%;
+  padding: 6px;
+  border-radius: 5px;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+.card-img, .card-img-bottom, .card-img-top{
+  width: 95%;
+  height: 235px;
+}
+
+.edit-product-container button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit-product-container button[type="submit"]:hover {
+  background-color: #0056b3;
+}

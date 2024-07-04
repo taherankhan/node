@@ -1,0 +1,215 @@
+<%- include('../header') %>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Product</title>
+  <link rel="stylesheet" href="/css/product/add-product.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+</head>
+
+<body>
+  <div class="add-product-container">
+    <h2 class="text-center">Add Product</h2>
+    <form id="addProductForm" action="/products" method="POST" enctype="multipart/form-data" onsubmit="return checkforblank()">
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" class="form-control" id="name" name="name" maxlength="50" placeholder="Enter product name" value="<%= name %>" autocomplete="off" />
+        <span id="nameError" class="user-message user-message--error"></span>
+      </div>
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea class="form-control" id="description" name="description" rows="1.5" maxlength="100" placeholder="Enter product description">
+<%= description %></textarea>
+        <span id="descriptionError" class="user-message user-message--error"></span>
+      </div>
+      <div class="form-group">
+        <label for="price">Price:</label>
+        <input type="text" class="form-control" id="price" name="price" placeholder="Enter product price" maxlength="7" value="<%= price %>" title="Enter a valid price (up to 7 digits and optionally 2 decimal places)" oninput="validatePrice(this)" autocomplete="off" />
+        <span id="priceError" class="user-message user-message--error"></span>
+      </div>
+      <div class="form-group">
+        <label for="quantity">Quantity:</label>
+        <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Enter product quantity" maxlength="7" value="<%= quantity %>" oninput="validateQuantity(this)" autocomplete="off" />
+        <span id="quantityError" class="user-message user-message--error"></span>
+      </div>
+      <div class="form-group">
+        <label for="category">Category:</label>
+        <select class="form-control" id="category" name="category" value="">
+          <option value="" disabled selected>Select category</option>
+          <!-- Options generated dynamically -->
+          <% categories.forEach(category => { %>
+          <option value="<%= category._id %>"><%= category.name %></option>
+          <% }); %>
+        </select>
+        <span id="categoryError" class="user-message user-message--error"></span>
+      </div>
+      <div class="form-group">
+        <label for="image">Image:</label>
+        <input type="file" name="image" id="image" accept="image/*"> <!-- Add accept attribute to accept only image files -->
+        <span id="imageError" class="user-message user-message--error"></span>
+      </div>
+      <span id="imageError" class="user-message user-message--error"></span>
+      <!-- Dynamically populate the currently logged-in user's information -->
+      <input type="hidden" name="user" value="<%= currentUser._id %>" />
+
+      <button type="submit" class="btn btn-primary">Add Product</button>
+    </form>
+  </div>
+  <script>
+    function validatePrice(input) {
+      // Remove any non-numeric characters except '.'
+      input.value = input.value.replace(/[^\d.]/g, "");
+
+      // Ensure only one decimal point
+      if ((input.value.match(/\./g) || []).length > 1) {
+        input.value = input.value.slice(0, -1);
+      }
+
+      // Restrict digits after decimal to two
+      if (input.value.includes(".")) {
+        var parts = input.value.split(".");
+        if (parts[1].length > 2) {
+          parts[1] = parts[1].slice(0, 2);
+          input.value = parts.join(".");
+        }
+        // Automatically add leading zero if input starts with ".xx"
+        if (parts[0] === "" && parts[1].length === 1) {
+          input.value = "0" + input.value;
+        }
+      }
+
+      // Ensure that the price is greater than zero
+      if (parseFloat(input.value) <= 0) {
+        input.value = "";
+      }
+
+      // Clear blank error message if input is provided
+      if (input.value !== "") {
+        document.getElementById("priceError").innerHTML = "";
+      }
+    }
+
+    function validateQuantity(input) {
+      // Remove any non-numeric characters
+      input.value = input.value.replace(/\D/g, "");
+
+      // Ensure that quantity is not zero
+      if (parseInt(input.value) === 0) {
+        input.value = "";
+      }
+
+      // Clear blank error message if input is provided
+      if (input.value !== "") {
+        document.getElementById("quantityError").innerHTML = "";
+      }
+    }
+
+    function checkforblank() {
+      var name = document.getElementById("name").value.trim();
+      var description = document.getElementById("description").value.trim();
+      var price = document.getElementById("price").value.trim();
+      var quantity = document.getElementById("quantity").value.trim();
+      var category = document.getElementById("category").value;
+      var image = document.getElementById("image").value;
+
+      var nameError = document.getElementById("nameError");
+      var descriptionError = document.getElementById("descriptionError");
+      var priceError = document.getElementById("priceError");
+      var quantityError = document.getElementById("quantityError");
+      var categoryError = document.getElementById("categoryError");
+      var imageError = document.getElementById("imageError");
+
+      var hasError = false;
+
+      // Clear previous error messages
+      nameError.innerHTML = "";
+      descriptionError.innerHTML = "";
+      priceError.innerHTML = "";
+      quantityError.innerHTML = "";
+      categoryError.innerHTML = "";
+      imageError.innerHTML = "";
+
+      if (name === "") {
+        nameError.innerHTML = "Please enter a product name.";
+        hasError = true;
+      }
+
+      if (description === "") {
+        descriptionError.innerHTML = "Please enter a description.";
+        hasError = true;
+      }
+
+      if (price === "") {
+        priceError.innerHTML = "Please enter a price.";
+        hasError = true;
+      }
+
+      if (quantity === "") {
+        quantityError.innerHTML = "Please enter a quantity.";
+        hasError = true;
+      }
+
+      if (category === "") {
+        categoryError.innerHTML = "Please select a category.";
+        hasError = true;
+      }
+
+      
+  // Validate image file type
+  if (image !== "") {
+    var fileExtension = image.split('.').pop().toLowerCase();
+    if (!(fileExtension === 'jpg' || fileExtension === 'jpeg' || fileExtension === 'png' || fileExtension === 'gif')) {
+      imageError.innerHTML = "Please select a valid image file (JPG, JPEG, PNG, GIF).";
+      hasError = true;
+    }
+  } else {
+    imageError.innerHTML = "Please select an image.";
+    hasError = true;
+  }
+
+      return !hasError;
+    }
+
+
+    // Add event listeners for input fields to trigger validation
+    document.getElementById("name").addEventListener("input", function() {
+      document.getElementById("nameError").innerHTML = "";
+    });
+
+    document
+      .getElementById("description")
+      .addEventListener("input", function() {
+        document.getElementById("descriptionError").innerHTML = "";
+      });
+
+    document.getElementById("price").addEventListener("input", function() {
+      validatePrice(this);
+    });
+
+    document
+      .getElementById("quantity")
+      .addEventListener("input", function() {
+        validateQuantity(this);
+      });
+
+    document
+      .getElementById("category")
+      .addEventListener("change", function() {
+        document.getElementById("categoryError").innerHTML = "";
+      });
+
+    // Display error messages inline if any
+    const errorMessages = document.querySelectorAll(".user-message");
+    if (errorMessages.length > 0) {
+      errorMessages.forEach((errorMessage) => {
+        errorMessage.style.display = "inline-block";
+      });
+    }
+  </script>
+</body>
+
+</html>

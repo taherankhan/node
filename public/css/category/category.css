@@ -1,0 +1,67 @@
+/* Center the heading */
+h2.text-center {
+    margin-top: 20px; /* Adjust as needed */
+}
+
+/* Add some padding to the list */
+ul.category-list {
+    padding: 20px 0; /* Adjust as needed */
+    list-style: none; /* Remove default list style */
+    display: flex; /* Use flexbox */
+    flex-direction: row; /* Set flex direction to row */
+    flex-wrap: wrap; /* Allow items to wrap */
+    justify-content: left; /* Center items horizontally */
+}
+
+/* Adjust spacing between list items */
+.category-item {
+    margin-bottom: 20px; /* Adjust as needed */
+    background-color: #f8f9fa; /* Background color */
+    border-radius: 8px; /* Rounded corners */
+    padding: 15px; /* Padding */
+    transition: transform 0.3s ease-in-out; /* Smooth transition */
+    width: calc(33.33% - 20px); /* Adjust width for three items in a row */
+    margin-right: 20px; /* Adjust margin between items */
+    box-sizing: border-box; /* Include padding in width calculation */
+    position: relative; /* Position relative for pseudo-element */
+}
+
+/* Hover effect */
+.category-item:hover {
+    transform: translateY(-5px); /* Move up on hover */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Box shadow */
+}
+
+/* Add pseudo-element for overlay */
+.category-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    border-radius: 8px; /* Rounded corners */
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.3s ease-in-out; /* Smooth transition */
+}
+
+/* Show overlay on hover */
+.category-item:hover::before {
+    opacity: 1; /* Show overlay on hover */
+}
+
+/* Style the delete button */
+.delete {
+    margin-right: 10px; /* Adjust as needed */
+}
+
+/* Edit and View Products buttons */
+.edit-btn, .view-btn {
+    transition: background-color 0.3s ease-in-out; /* Smooth transition */
+}
+
+/* Hover effect for Edit and View Products buttons */
+.edit-btn:hover, .view-btn:hover {
+    background-color: #6c757d; /* Darker background color on hover */
+}

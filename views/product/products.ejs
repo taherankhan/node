@@ -1,0 +1,369 @@
+<%- include('../header') %>
+
+<!DOCTYPE html>
+<html lang="en" >
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Products</title>
+    <meta http-equiv="refresh" />
+    <link rel="stylesheet" href="/css/product/product.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <!-- Toastr CSS -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <h2 class="text-center">All Products</h2>
+      
+      
+      <div class="container d-flex gap-9 flex-wrap align-items-center justify-content-center">
+        <% if (products.length> 0) { %> <% products.forEach(product=> { %>
+        <div class="col-md-3 product-card" id="product_<%= product._id %>">
+          <div class="card mb-3">
+            <div class="card-body">
+              <!-- Add anchor tag to make product image clickable -->
+              <a href="/products/<%= product._id %>">
+                <!-- Add image tag inside the anchor tag -->
+                <img
+                  src="/images/<%= product.imageUrl %>"
+                  class="card-img-top"
+                  alt="<%= product.name %>"
+                />
+              </a>
+              <h5 class="card-title">
+                <%= product.name %>
+              </h5>
+              <p class="card-text">Price: $<%= product.price %></p>
+              <% if (product.category) { %>
+              <p class="card-text">Category: <%= product.category.name %></p>
+              <% } else { %>
+              <p class="card-text">Category: N/A</p>
+              <% } %>
+              <div class="d-grid gap-2">
+                <a href="/products/<%= product._id %>" class="btn btn-primary"
+                  >View</a
+                >
+                <% if (isadmin) { %>
+                <a
+                  href="/products/<%= product._id %>/edit"
+                  class="btn btn-success"
+                  >Edit</a
+                >
+                <button
+                  class="delete btn btn-danger"
+                  data-product-id="<%= product._id %>"
+                  data-product-name="<%= product.name %>"
+                >
+                  Delete
+                </button>
+                <% } else { %> <% if (product.isInCart) { %> <% const
+                maxQuantity=Math.min(product.quantity, 5); %> <% const
+                cartItem=user.cart.items.find(item=> item.productId.toString()
+                === product._id.toString()); %> <% const cartQuantity=cartItem ?
+                cartItem.quantity : 1; %>
+
+                <div class="input-group">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <button
+                      class="quantity-control btn btn-outline-secondary"
+                      data-action="decrease"
+                      data-product-id="<%= product._id %>"
+                      style="
+                        flex-shrink: 0;
+                        border-radius: 50%;
+                        width: 30px;
+                        height: 30px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background: #007bff;
+                        color: white;
+                      "
+                    >
+                      -
+                    </button>
+                    <input
+                      type="text"
+                      class="form-control quantity-input"
+                      value="<%= product.cartQuantity %>"
+                      disabled
+                      style="
+                        width: 50px;
+                        text-align: center;
+                        flex-shrink: 0;
+                        border: 1px solid #ced4da;
+                        border-radius: 5px;
+
+                      "
+                    />
+                    <button
+                      class="quantity-control btn btn-outline-secondary"
+                      data-action="increase"
+                      data-product-id="<%= product._id %>"
+                      style="
+                        flex-shrink: 0;
+                        border-radius: 50%;
+                        width: 30px;
+                        height: 30px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background: #007bff;
+                        color: white;
+                      "
+                    >
+                      +
+                    </button>
+                    <button
+                      class="update-quantity btn btn-primary"
+                      data-product-id="<%= product._id %>"
+                      style="flex-grow: 1; border-radius: 5px;"
+                    >
+                      Update
+                    </button>
+                  </div>
+                </div>
+                <% } else { %>
+                <!-- Show Add to Cart button if product is not in cart -->
+                <form action="/cart/add" method="post">
+                  <input
+                    type="hidden"
+                    name="productId"
+                    value="<%= product._id %>"
+                  />
+                  <button type="submit" class="add-to-cart btn btn-info">
+                    Add to Cart
+                  </button>
+                </form>
+                <% } %> <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% }); %>
+
+      </div>
+        <!-- Pagination -->
+        <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+            <% if (hasPreviousPage) { %>
+            <li class="page-item">
+              <a
+                class="page-link"
+                href="?page=<%= previousPage %>"
+                aria-label="Previous"
+              >
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <% } %> <% for (let i=1; i <=totalPages; i++) { %>
+            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+              <a class="page-link" href="?page=<%= i %>">
+                <%= i %>
+              </a>
+            </li>
+            <% } %> <% if (hasNextPage) { %>
+            <li class="page-item">
+              <a
+                class="page-link"
+                href="?page=<%= nextPage %>"
+                aria-label="Next"
+              >
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+            <% } %>
+          </ul>
+        </nav>
+        <% } else { %>
+        <h1>No Products Found!</h1>
+        <% } %>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        // Listen for click events on delete buttons
+        $(".delete").click(function () {
+          const productId = $(this).data("product-id");
+          const productName = $(this).data("product-name");
+
+          // Confirm deletion
+          if (confirm("Are you sure you want to delete this product?")) {
+            // Send DELETE request to the server
+            $.ajax({
+              url: "/products/" + productId,
+              method: "DELETE",
+              success: function (response) {
+                // Product deleted successfully, show toast notification
+                toastr.success(response.message, {
+                  timeOut: 3000,
+                });
+                // Remove the deleted product from the display
+                $("#product_" + productId).remove();
+              },
+              error: function (xhr, status, error) {
+                // Error occurred while deleting the product
+                console.error("Error deleting product:", error);
+                toastr.error("Error deleting product. Please try again later.");
+              },
+            });
+          }
+        });
+
+        // Listen for click events on quantity controls (+/- buttons)
+        $(".quantity-control").click(function () {
+          const productId = $(this).data("product-id");
+          const action = $(this).data("action");
+          let quantityInput = $(this).parent().find(".quantity-input");
+          let currentQuantity = parseInt(quantityInput.val());
+
+          // Perform action based on button clicked
+          if (action === "increase") {
+            currentQuantity++;
+          } else if (action === "decrease") {
+            if (currentQuantity > 1) {
+              currentQuantity--;
+            }
+          }
+
+          // Update quantity input value
+          quantityInput.val(currentQuantity);
+        });
+
+        // Listen for click events on update quantity button
+        $(".update-quantity").click(function () {
+          const productId = $(this).data("product-id");
+          const quantity = parseInt(
+            $(this).parent().find(".quantity-input").val()
+          );
+
+          // Call function to update cart quantity via AJAX
+          updateCartQuantity(productId, quantity);
+        });
+
+        // Function to update cart quantity via AJAX
+        function updateCartQuantity(productId, quantity) {
+          $.ajax({
+            url: "/products/update-cart-quantity",
+            method: "POST",
+            data: {
+              productId: productId,
+              quantity: quantity,
+            },
+            success: function (response) {
+              // Handle success response
+              toastr.success(response.message);
+            },
+            error: function (xhr, status, error) {
+              // Handle error response
+              console.error("Error updating cart quantity:", error);
+              toastr.error("Error updating cart quantity. Please try again.");
+            },
+          });
+        }
+      });
+    </script>
+
+    <script>
+      // Display toastr message if present
+      document.addEventListener("DOMContentLoaded", function () {
+        const successMessage = "<%= updated %>";
+        if (successMessage) {
+          toastr.options = {
+            closeButton: true,
+            debug: false,
+            newestOnTop: false,
+            progressBar: true,
+            positionClass: "toast-top-right",
+            preventDuplicates: false,
+            onclick: null,
+            showDuration: "300",
+            hideDuration: "1000",
+            timeOut: "5000",
+            extendedTimeOut: "5000",
+            showEasing: "swing",
+            hideEasing: "linear",
+            showMethod: "fadeIn",
+            hideMethod: "fadeOut",
+          };
+          toastr.success(successMessage);
+        }
+      });
+    </script>
+    <script>
+      // Display toastr message if present
+      document.addEventListener("DOMContentLoaded", function () {
+        const successMessage = "<%= successMessage %>";
+        if (successMessage) {
+          toastr.options = {
+            closeButton: false,
+            debug: false,
+            newestOnTop: false,
+            progressBar: true,
+            positionClass: "toast-top-right",
+            preventDuplicates: false,
+            onclick: null,
+            showDuration: "300",
+            hideDuration: "1000",
+            timeOut: "5000",
+            extendedTimeOut: "000",
+            showEasing: "swing",
+            hideEasing: "linear",
+            showMethod: "fadeIn",
+            hideMethod: "fadeOut",
+          };
+          toastr.success(successMessage);
+        }
+      });
+    </script>
+    <script>
+      // Display toastr message if present
+      document.addEventListener("DOMContentLoaded", function () {
+        const created = "<%= created %>";
+        if (created) {
+          toastr.options = {
+            closeButton: true,
+            debug: false,
+            newestOnTop: false,
+            progressBar: true,
+            positionClass: "toast-top-right",
+            preventDuplicates: false,
+            onclick: null,
+            showDuration: "300",
+            hideDuration: "1000",
+            timeOut: "5000",
+            extendedTimeOut: "1000",
+            showEasing: "swing",
+            hideEasing: "linear",
+            showMethod: "fadeIn",
+            hideMethod: "fadeOut",
+          };
+          toastr.success(created);
+        }
+      });
+    </script>
+    <script>
+      window.addEventListener('pageshow', function(event) {
+          if (event.persisted) {
+              location.reload();
+          }
+      });
+  </script>  
+  </body>
+</html>
